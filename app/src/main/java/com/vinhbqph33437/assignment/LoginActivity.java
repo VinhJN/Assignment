@@ -52,29 +52,30 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = edEmail.getText().toString();
-                String pass = edPass.getText().toString();
+                String email = edEmail.getText().toString().trim();
+                String password = edPass.getText().toString().trim();
                 if (TextUtils.isEmpty(email)){
                     Toast.makeText(LoginActivity.this, "Chưa nhập email. Mời nhập lại", Toast.LENGTH_SHORT).show();
                     return;
-                } if (TextUtils.isEmpty(pass)){
+                }
+                if (TextUtils.isEmpty(password)){
                     Toast.makeText(LoginActivity.this, "Chưa nhập mật khẩu. Mời nhập lại", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                    mAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener( new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()){
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                Toast.makeText(LoginActivity.this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                            }else {
-                                Log.w(TAG, "signInWithEmail: failure",task.getException() );
-                                Toast.makeText(LoginActivity.this, "Đăng ký thất bại", Toast.LENGTH_SHORT).show();
-                            }
+                mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("Login", "signInWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            finishAffinity();
+                        } else {
+                            Log.w("Login", "signInWithEmail:failure", task.getException());
+                            Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                         }
-                    });
-
+                    }
+                });
             }
         });
     }

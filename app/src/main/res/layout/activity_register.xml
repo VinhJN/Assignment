@@ -40,6 +40,18 @@
                 android:layout_marginBottom="30dp"
                 android:alpha="0.7"
                 android:text="Please sign up to get started" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edNameRegister"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="name"
+                    android:padding="10dp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"

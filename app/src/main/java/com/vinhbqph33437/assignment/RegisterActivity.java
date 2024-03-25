@@ -30,6 +30,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         mAuth = FirebaseAuth.getInstance();
+        edName = findViewById(R.id.edNameRegister);
         edEmail = findViewById(R.id.edEmailRegister);
         edPass = findViewById(R.id.edPasswordRegister);
         edRePass = findViewById(R.id.edRePasswordRegister);
@@ -39,35 +40,53 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = edEmail.getText().toString();
-                String pass = edPass.getText().toString();
-                String rePass = edRePass.getText().toString();
-                if (TextUtils.isEmpty(email)){
+                String name = edName.getText().toString().trim();
+                String email = edEmail.getText().toString().trim();
+                String password = edPass.getText().toString().trim();
+                String rePass = edRePass.getText().toString().trim();
+                if (TextUtils.isEmpty(name)) {
+                    Toast.makeText(RegisterActivity.this, "Chưa nhập tên. Mời nhập lại", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (TextUtils.isEmpty(email)) {
                     Toast.makeText(RegisterActivity.this, "Chưa nhập email. Mời nhập lại", Toast.LENGTH_SHORT).show();
                     return;
-                }if (TextUtils.isEmpty(pass)){
+                }
+                if (TextUtils.isEmpty(password)) {
                     Toast.makeText(RegisterActivity.this, "Chưa nhập mật khẩu. Mời nhập lại", Toast.LENGTH_SHORT).show();
                     return;
-                }if (TextUtils.isEmpty(rePass)){
+                }
+                if (password.length() < 6) {
+                    Toast.makeText(RegisterActivity.this, "Độ dài mật khẩu ít nhất là 6 ký tự. Mời nhập lại", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (TextUtils.isEmpty(rePass)) {
                     Toast.makeText(RegisterActivity.this, "Chưa nhập lại mật khẩu. Mời nhập lại", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                    mAuth.createUserWithEmailAndPassword(email, pass)
-                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()){
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                Toast.makeText(RegisterActivity.this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
-                            }else {
-                                Log.w(TAG, "creatUserWithEmail: failure",task.getException() );
-                                Toast.makeText(RegisterActivity.this, "Đăng ký thất bại", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
+                if (!password.equals(rePass)) {
+                    Toast.makeText(RegisterActivity.this, "Mật khẩu và nhập lại mật khẩu không trùng khớp. Mời nhập lại", Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
+                mAuth.createUserWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d("RegisterActivity", "createUserWithEmail:success");
+                                    FirebaseUser user = mAuth.getCurrentUser();
+                                    Toast.makeText(RegisterActivity.this, "Account created for " + user.getEmail(), Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                                } else {
+                                    Log.w("RegisterActivity", "createUserWithEmail:failure", task.getException());
+                                    Toast.makeText(RegisterActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+            }
         });
+
 
         btnReturn.setOnClickListener(new View.OnClickListener() {
             @Override
