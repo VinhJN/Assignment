@@ -1,20 +1,23 @@
 package com.vinhbqph33437.assignment.Model;
 
-public class Student {
+import java.io.Serializable;
+import java.util.ArrayList;
+
+public class Student implements Serializable {
 
     private String _id;
     private String name;
     private String mssv;
 
-    private float point;
+    private String point;
 
-    private String avatar;
+    private ArrayList<String> avatar;
     private String createdAt, updatedAt;
-    private String thumbnailUrl;
+
     public Student() {
     }
 
-    public Student(String _id, String name, String mssv, float point, String avatar, String createdAt, String updatedAt, String thumbnailUrl) {
+    public Student(String _id, String name, String mssv, String point, ArrayList<String> avatar, String createdAt, String updatedAt) {
         this._id = _id;
         this.name = name;
         this.mssv = mssv;
@@ -22,7 +25,6 @@ public class Student {
         this.avatar = avatar;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.thumbnailUrl = thumbnailUrl;
     }
 
     public String get_id() {
@@ -49,19 +51,19 @@ public class Student {
         this.mssv = mssv;
     }
 
-    public float getPoint() {
+    public String getPoint() {
         return point;
     }
 
-    public void setPoint(float point) {
+    public void setPoint(String point) {
         this.point = point;
     }
 
-    public String getAvatar() {
+    public ArrayList<String> getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(String avatar) {
+    public void setAvatar(ArrayList<String> avatar) {
         this.avatar = avatar;
     }
 
@@ -79,13 +81,5 @@ public class Student {
 
     public void setUpdatedAt(String updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public String getThumbnailUrl() {
-        return thumbnailUrl;
-    }
-
-    public void setThumbnailUrl(String thumbnailUrl) {
-        this.thumbnailUrl = thumbnailUrl;
     }
 }
